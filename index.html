@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="src/js/main.js"></script>
+    
+    <script src="src/js/app/app.js"></script>
+    <script src="src/js/app/controllers/MainController.js"></script>
+    
+    <style>
+      .indent {
+        padding-left: 25px;
+      }
+    </style>
+  </head>
+  <body ng-app="app">
+    <script type="text/ng-template" id="empty.html">
+    </script>
+    
+    <script type="text/ng-template" id="value.html">
+      {{ expression.expression.value }}
+    </script>
+    
+    <script type="text/ng-template" id="sum.html">
+        (<ng-include ng-repeat="expression in [expression.expression.left]" src="expression.type + '.html'"></ng-include>
+        +
+        <ng-include ng-repeat="expression in [expression.expression.right]" src="expression.type + '.html'"></ng-include>)
+    </script>
+    
+    <script type="text/ng-template" id="diff.html">
+        (<ng-include ng-repeat="expression in [expression.expression.left]" src="expression.type + '.html'"></ng-include>
+        -
+        <ng-include ng-repeat="expression in [expression.expression.right]" src="expression.type + '.html'"></ng-include>)
+    </script>
+    
+    <script type="text/ng-template" id="form.value.html">
+      <div>
+        <select ng-model="expression.type" ng-change="vm.onChange(expression)">
+         <option ng-repeat="operation in vm.operations" value="{{operation.value}}">
+           {{operation.name}}
+         </option>
+        </select>
+        <input ng-model="expression.expression.value" type="text"/>
+      </div>
+    </script>
+    
+    <script type="text/ng-template" id="form.empty.html">
+      <div>
+        <select ng-model="expression.type" ng-change="vm.onChange(expression)">
+         <option ng-repeat="operation in vm.operations" value="{{operation.value}}">
+           {{operation.name}}
+         </option>
+        </select>
+      </div>
+    </script>
+    
+    <script type="text/ng-template" id="form.sum.html">
+        <select ng-model="expression.type" ng-change="vm.onChange(expression)">
+           <option ng-repeat="operation in vm.operations" value="{{operation.value}}">
+             {{operation.name}}
+           </option>
+        </select>
+        <div class="indent">
+           <ng-include ng-repeat="expression in [expression.expression.left]" src="'form.' + expression.type + '.html'"></ng-include>
+           <ng-include ng-repeat="expression in [expression.expression.right]" src="'form.'+ expression.type + '.html'"></ng-include>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="form.diff.html">
+        <select ng-model="expression.type" ng-change="vm.onChange(expression)">
+           <option ng-repeat="operation in vm.operations" value="{{operation.value}}">
+             {{operation.name}}
+           </option>
+        </select>
+        <div class="indent">
+           <ng-include ng-repeat="expression in [expression.expression.left]" src="'form.' + expression.type + '.html'"></ng-include>
+           <ng-include ng-repeat="expression in [expression.expression.right]" src="'form.'+ expression.type + '.html'"></ng-include>
+        </div>
+    </script>
+    
+    <div ng-controller="MainController as vm">
+      <div>
+        <ng-include ng-repeat="expression in [vm.expression]" src="expression.type + '.html'"></ng-include>
+      </div>
+      <div>
+        <ng-include ng-repeat="expression in [vm.expression]" src="'form.' + expression.type + '.html'"></ng-include>
+      </div>
+    </div>
+  </body>
+</html>
